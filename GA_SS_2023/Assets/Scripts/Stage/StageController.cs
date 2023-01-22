@@ -6,24 +6,20 @@ using UnityEngine;
 public class StageController : MonoBehaviour
 {
     // Serialized private variables.
-    [SerializeField] private Transform playerTransform;
-    [SerializeField] private Transform trackPlatformGroupTransform;
-    [SerializeField] private Transform ballPlatformTransform;
+    [SerializeField] private Transform playerTransform, trackPlatformGroupTransform, ballPlatformTransform, trackPathGroupTransform;
+    [SerializeField] private TrackPropertyDistribution trackPropertyDistribution;
     [SerializeField] private float platformDistanceAddition;
 
     // Private variables.
+
     // Player transform values.
     private Vector3 playerOriginalPosition;
 
     // Track platform group transform values.
-    private float trackOriginalPositionY;
-    private float trackOriginalPositionZ;
-    private float trackOriginalScaleZ;
+    private float trackOriginalPositionY, trackOriginalPositionZ, trackOriginalScaleZ;
 
     // Ball platform values.
-    private float ballPlatformOriginalPositionZ;
-    private float ballPlatformOriginalPositionY;
-    private float ballPlatformOriginalScaleY;
+    private float ballPlatformOriginalPositionZ, ballPlatformOriginalPositionY, ballPlatformOriginalScaleY;
 
     private void Awake()
     {
@@ -35,17 +31,20 @@ public class StageController : MonoBehaviour
     {
         // Get original values.
         // Player values.
-        playerOriginalPosition = playerTransform.position;
+        playerOriginalPosition = playerTransform.localPosition;
 
         // Track platform group values.
         trackOriginalScaleZ = trackPlatformGroupTransform.localScale.z;
-        trackOriginalPositionY = trackPlatformGroupTransform.position.y;
-        trackOriginalPositionZ = trackPlatformGroupTransform.position.z;
+        trackOriginalPositionY = trackPlatformGroupTransform.localPosition.y;
+        trackOriginalPositionZ = trackPlatformGroupTransform.localPosition.z;
+
+        // Get the platforms' Z scale value for distributing it for paths.
+        trackPropertyDistribution.OriginalTrackPlatformGroupScaleZ = trackOriginalScaleZ;
 
         // Ball platform values.
         ballPlatformOriginalScaleY = ballPlatformTransform.transform.localScale.y;
-        ballPlatformOriginalPositionY = ballPlatformTransform.transform.position.y;
-        ballPlatformOriginalPositionZ = ballPlatformTransform.transform.position.z;
+        ballPlatformOriginalPositionY = ballPlatformTransform.transform.localPosition.y;
+        ballPlatformOriginalPositionZ = ballPlatformTransform.transform.localPosition.z;
 
         // Reset platform distance addition upon starting the game.
         platformDistanceAddition = 0f;
@@ -69,35 +68,36 @@ public class StageController : MonoBehaviour
         // Rescaling and repositioning can be demonstrated by increasing platfromDistanceAddition value, the component is attached to Stage object!
 
             // Add platformDistanceAddition value to Ball platform transform position z value.
-            ballPlatformTransform.position = new Vector3(ballPlatformTransform.position.x, ballPlatformTransform.position.y, ballPlatformOriginalPositionZ + platformDistanceAddition);
+            ballPlatformTransform.localPosition = new Vector3(ballPlatformTransform.localPosition.x, ballPlatformTransform.localPosition.y, ballPlatformOriginalPositionZ + platformDistanceAddition);
 
             // Update track platform group's and ball platform's transform values proportionally. Some yet unknown variables are missing from the formulas,
             // because the objects shouldn't grow more detached from each other as the platformDistanceAddition increases.
 
-            // X / ballPlatformTransform.position.z = trackOriginalScaleZ / ballPlatformOriginalPositionZ.
-            //float trackNominatorScaleZ = ballPlatformTransform.position.z * trackOriginalScaleZ / ballPlatformOriginalPositionZ; // WIP
+            // X / ballPlatformTransform.localPosition.z = trackOriginalScaleZ / ballPlatformOriginalPositionZ.
             trackPlatformGroupTransform.localScale = new Vector3(trackPlatformGroupTransform.localScale.x, trackPlatformGroupTransform.localScale.y, UpdateStageObjects(trackOriginalScaleZ));
 
-            // X / ballPlatformTransform.position.z = trackOriginalPositionY / ballPlatformOriginalPositionZ.
-            //float trackNominatorPositionY = ballPlatformTransform.position.z * trackOriginalPositionY / ballPlatformOriginalPositionZ; // WIP
-            trackPlatformGroupTransform.position = new Vector3(trackPlatformGroupTransform.position.x, UpdateStageObjects(trackOriginalPositionY), trackPlatformGroupTransform.position.z);
+            // Update Track path group local scale according to Track platform group local scale.
+            trackPathGroupTransform.localScale = trackPlatformGroupTransform.localScale;
 
-            // X / ballPlatformTransform.position.z = trackOriginalPositionZ / ballPlatformOriginalPositionZ.
-            //float trackNominatorPositionZ = ballPlatformTransform.position.z * trackOriginalPositionZ / ballPlatformOriginalPositionZ; // WIP
-            trackPlatformGroupTransform.position = new Vector3(trackPlatformGroupTransform.position.x, trackPlatformGroupTransform.position.y, UpdateStageObjects(trackOriginalPositionZ));
+            // X / ballPlatformTransform.localPosition.z = trackOriginalPositionY / ballPlatformOriginalPositionZ.
+            trackPlatformGroupTransform.localPosition = new Vector3(trackPlatformGroupTransform.localPosition.x, UpdateStageObjects(trackOriginalPositionY), trackPlatformGroupTransform.localPosition.z);
 
-            // X / ballPlatformTransform.position.z = ballPlatformOriginalScaleY / ballPlatformOriginalPositionZ.
-            //float ballPlatformNominatorScaleY = ballPlatformTransform.position.z * ballPlatformOriginalScaleY / ballPlatformOriginalPositionZ; // WIP
+            // X / ballPlatformTransform.localPosition.z = trackOriginalPositionZ / ballPlatformOriginalPositionZ.
+            trackPlatformGroupTransform.localPosition = new Vector3(trackPlatformGroupTransform.localPosition.x, trackPlatformGroupTransform.localPosition.y, UpdateStageObjects(trackOriginalPositionZ));
+
+            // Update Track path group position according to Track platform group position.
+            trackPathGroupTransform.localPosition = trackPlatformGroupTransform.localPosition;
+
+            // X / ballPlatformTransform.localPosition.z = ballPlatformOriginalScaleY / ballPlatformOriginalPositionZ.
             ballPlatformTransform.localScale = new Vector3(ballPlatformTransform.localScale.x, UpdateStageObjects(ballPlatformOriginalScaleY), ballPlatformTransform.localScale.z);
 
-            // X / ballPlatformTransform.position.z = ballPlatformOriginalPositionY / ballPlatformOriginalPositionZ.
-            //float ballPlatformNominatorPositionY = ballPlatformTransform.position.z * ballPlatformOriginalPositionY / ballPlatformOriginalPositionZ; // WIP
-            ballPlatformTransform.position = new Vector3(ballPlatformTransform.position.x, UpdateStageObjects(ballPlatformOriginalPositionY), ballPlatformTransform.position.z);
+            // X / ballPlatformTransform.localPosition.z = ballPlatformOriginalPositionY / ballPlatformOriginalPositionZ.
+            ballPlatformTransform.localPosition = new Vector3(ballPlatformTransform.localPosition.x, UpdateStageObjects(ballPlatformOriginalPositionY), ballPlatformTransform.localPosition.z);
     }
 
     private float UpdateStageObjects(float original)
     {
-        float nominator = ballPlatformTransform.position.z * original / ballPlatformOriginalPositionZ;
+        float nominator = ballPlatformTransform.localPosition.z * original / ballPlatformOriginalPositionZ; // WIP, some yet unknown factor(s) missing.
         return nominator;
     }
 }
