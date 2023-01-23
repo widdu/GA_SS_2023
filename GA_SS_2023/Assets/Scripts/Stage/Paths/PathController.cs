@@ -18,31 +18,31 @@ public class PathController : MonoBehaviour
         myStartPointTransform = transform.Find("Start").GetComponent<Transform>();
         if(myStartPointTransform == null)
         {
-            Debug.LogWarning("Can't find start point's transform component for " + gameObject.name + "!");
+            Debug.LogWarning("Can't find start point's transform component for " + gameObject.name + "'s path controller component!");
         }
 
         myEndPointTransform = transform.Find("End").GetComponent<Transform>();
         if (myEndPointTransform == null)
         {
-            Debug.LogWarning("Can't find end point's transform component for " + gameObject.name + "!");
+            Debug.LogWarning("Can't find end point's transform component for " + gameObject.name + "'s path controller component!");
         }
 
         trackPathGroup = transform.parent.gameObject;
         if(trackPathGroup == null)
         {
-            Debug.LogWarning("Can't find Track path group game object for " + gameObject.name + "!");
+            Debug.LogWarning("Can't find Track path group game object for " + gameObject.name + "'s path controller component!");
         }
 
         trackPathGroupTransform = trackPathGroup.GetComponent<Transform>();
         if (trackPathGroupTransform == null)
         {
-            Debug.LogWarning("Can't find Track path group's transform component for " + gameObject.name + "!");
+            Debug.LogWarning("Can't find Track path group's transform component for " + gameObject.name + "'s path controller component!");
         }
 
         trackPropertyDistribution = trackPathGroup.GetComponent<TrackPropertyDistribution>();
         if(trackPropertyDistribution == null)
         {
-            Debug.LogWarning("Can't find Track path group's track property distribution component for " + gameObject.name + "!");
+            Debug.LogWarning("Can't find Track path group's track property distribution component for " + gameObject.name + "'s path controller component!");
         }
     }
 

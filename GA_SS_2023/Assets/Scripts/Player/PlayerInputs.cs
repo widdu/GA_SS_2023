@@ -29,6 +29,6 @@ public class PlayerInputs : MonoBehaviour
     public void Move(InputAction.CallbackContext callback)
     {
         moveInput = callback.ReadValue<Vector2>();
-        playerController.MovementTarget(moveInput);
+        playerController.MovementSwitch(moveInput);
     }
 }

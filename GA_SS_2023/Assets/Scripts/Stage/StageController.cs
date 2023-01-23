@@ -6,11 +6,34 @@ using UnityEngine;
 public class StageController : MonoBehaviour
 {
     // Serialized private variables.
-    [SerializeField] private Transform playerTransform, trackPlatformGroupTransform, ballPlatformTransform, trackPathGroupTransform;
+    [SerializeField] private GameObject player;
+    [SerializeField] private Transform trackPlatformGroupTransform, ballPlatformTransform, trackPathGroupTransform;
+
+    // Start platform points.
+    [SerializeField] private Transform startPointLeftTransform, startPointMiddleTransform, startPointRightTransform;
+
+    // Track start points.
+    [SerializeField] private Transform trackStartLeftTransform, trackStartMiddleTransform, trackStartRightTransform;
+
+    // Track end points.
+    [SerializeField] private Transform trackEndLeftTransform, trackEndMiddleTransform, trackEndRightTransform;
+
     [SerializeField] private TrackPropertyDistribution trackPropertyDistribution;
     [SerializeField] private float platformDistanceAddition;
 
     // Private variables.
+    private PlayerController playerController;
+
+    private Transform playerTransform;
+
+    // Start platform point transforms.
+    private Vector3 startLeftTargetPosition, startMiddleTargetPosition, startRightTargetPosition;
+
+    // Track start point transforms.
+    private Vector3 trackStartLeftTargetPosition, trackStartMiddleTargetPosition, trackStartRightTargetPosition;
+
+    // Track end point transforms.
+    private Vector3 trackEndLeftTargetPosition, trackEndMiddleTargetPosition, trackEndRightTargetPosition;
 
     // Player transform values.
     private Vector3 playerOriginalPosition;
@@ -23,12 +46,37 @@ public class StageController : MonoBehaviour
 
     private void Awake()
     {
-        
+        playerController = player.GetComponent<PlayerController>();
+        if(playerController == null)
+        {
+            Debug.LogWarning("Can't find player controller component for stage controller component!");
+        }
+
+        playerTransform = player.GetComponent<Transform>();
+        if (playerTransform == null)
+        {
+            Debug.LogWarning("Can't find player object's transform component for stage controller component!");
+        }
     }
 
     // Start is called before the first frame update.
     private void Start()
     {
+        // Get start point positions.
+        startLeftTargetPosition = startPointLeftTransform.position;
+        startMiddleTargetPosition = startPointMiddleTransform.position;
+        startRightTargetPosition = startPointRightTransform.position;
+
+        // Get track start point positions.
+        trackStartLeftTargetPosition = trackStartLeftTransform.position;
+        trackStartMiddleTargetPosition = trackStartMiddleTransform.position;
+        trackStartRightTargetPosition = trackStartRightTransform.position;
+
+        // Get track end point positions.
+        trackEndLeftTargetPosition = trackEndLeftTransform.position;
+        trackEndMiddleTargetPosition = trackEndMiddleTransform.position;
+        trackEndRightTargetPosition = trackEndRightTransform.position;
+
         // Get original values.
         // Player values.
         playerOriginalPosition = playerTransform.localPosition;
@@ -48,6 +96,8 @@ public class StageController : MonoBehaviour
 
         // Reset platform distance addition upon starting the game.
         platformDistanceAddition = 0f;
+
+        playerController.Setup(startRightTargetPosition, startMiddleTargetPosition.x, trackStartRightTargetPosition.z, trackPlatformGroupTransform.localEulerAngles.x);
     }
 
     // Update is called once per frame.

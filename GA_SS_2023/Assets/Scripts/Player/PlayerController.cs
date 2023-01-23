@@ -6,27 +6,34 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // Serialized private values
-    [SerializeField] private Transform startPointLeftTransform, startPointMiddleTransform, startPointRightTransform;
+    // [SerializeField] private Vector3 movement;    Inspectable value while uncommented
 
     // Private values
-    private Vector3 startLeftTargetPosition, startMiddleTargetPosition, startRightTargetPosition, movement, targetPosition;
-    private float movementSpeed;
+    private PlayerCollider playerCollider;
+    private Vector3 movement, targetPosition, startPointDistanceToTrackStartPoint;
+    private float movementSpeed, trackAngle, movementSpeedSlopeSubtraction;
+
+    private enum Path
+    {
+        Start, // 0
+        Track // 1
+    }
+
+    private Path path;
 
     private void Awake()
     {
-
+        playerCollider = GetComponent<PlayerCollider>();
+        if (playerCollider == null)
+        {
+            Debug.LogWarning("Can't get player object's child object Collider's player collider component for player controller component!");
+        }
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        // Get start point positions.
-        startLeftTargetPosition = startPointLeftTransform.position;
-        startMiddleTargetPosition = startPointMiddleTransform.position;
-        startRightTargetPosition = startPointRightTransform.position;
-
-        // Movement speed units per second is equals to distance between points in X-axis.
-        movementSpeed = startPointRightTransform.position.x - startPointMiddleTransform.position.x;
+        path = Path.Start;
     }
 
     // Update is called once per frame
@@ -36,6 +43,26 @@ public class PlayerController : MonoBehaviour
         {
             MoveCharacter();
         }
+
+        if(!playerCollider.IsActive)
+        {
+            Fall();
+        }
+    }
+
+    public void Setup(Vector3 startPointRightTransformPosition, float startPointMiddleTransformPositionX, float trackStartRightTargetPositionZ, float trackPlatformGroupLocalEulerAngleX)
+    {
+        // Movement speed units per second is equals to distance between points in X-axis.
+        movementSpeed = startPointRightTransformPosition.x - startPointMiddleTransformPositionX;
+
+        // Distance between start path point and respective track path start point.
+        startPointDistanceToTrackStartPoint = new Vector3(0f, 0f, trackStartRightTargetPositionZ - startPointRightTransformPosition.z);
+
+        // Save track platform group Z rotation for when player gets on a track platform.
+        trackAngle = trackPlatformGroupLocalEulerAngleX;
+
+        // Subtract the effect of the slope on the track from movement speed and save it to the following variable.
+        movementSpeedSlopeSubtraction = movementSpeed - ((360 - Mathf.Abs(trackAngle)) * movementSpeed / 360);
     }
 
     private void MoveCharacter()
@@ -43,10 +70,8 @@ public class PlayerController : MonoBehaviour
         Vector2 playerPositionXZ = new Vector2(transform.localPosition.x, transform.localPosition.z);
         Vector2 targetPositionXZ = new Vector2(targetPosition.x, targetPosition.z);
         float distance = Vector2.Distance(playerPositionXZ, targetPositionXZ);
-        /*Vector2 travel = targetPosition - new Vector2(transform.position.x, transform.position.z);
-        Vector2 frameMovement = travel.normalized * Time.fixedDeltaTime * movement;
-        float distance = travel.magnitude;*/
-        if (Mathf.Abs(movement.x) < distance)
+
+        if (Mathf.Max(Mathf.Abs(movement.x), Mathf.Abs(movement.z)) < distance)
         {
             transform.Translate(movement);
         }
@@ -54,17 +79,52 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
             targetPosition = Vector2.zero;
+
+            transform.localEulerAngles = new Vector3(trackAngle * (int)path, transform.rotation.y, transform.rotation.z);
         }
     }
 
-    public void MovementTarget(Vector2 moveInput)
+    public void MovementSwitch(Vector2 moveInput)
     {
         if (targetPosition == Vector3.zero)
         {
-            Vector3 direction = new Vector3(moveInput.x, 0f, moveInput.y) * movementSpeed;
+            switch (path)
+            {
+                case Path.Start:
+                    MovementTargetStart(moveInput);
+                    break;
+                case Path.Track:
+                    MovementTargetTrack(moveInput);
+                    break;
+            }
+        }
+    }
+
+    private void MovementTargetStart(Vector2 moveInput)
+    {
+        if (moveInput.x != 0) // Prioritize horizontal movement on start platform.
+        {
+            Vector3 direction = new Vector3(moveInput.x, 0f, 0f) * movementSpeed;
             movement = direction * Time.deltaTime;
             targetPosition = direction + transform.position;
         }
-        //transform.localPosition = Vector3.MoveTowards(transform.localPosition, movement, movementSpeed * Time.deltaTime);
+        else
+        {
+            // TODO: Jumping from start platform point to track platform point.
+            Vector3 direction = new Vector3(0f, 0f, moveInput.y) * movementSpeed;
+            movement = direction * Time.deltaTime;
+            targetPosition = startPointDistanceToTrackStartPoint + transform.position;
+            path = Path.Track;
+        }
+    }
+
+    private void MovementTargetTrack(Vector2 moveInput)
+    {
+
+    }
+
+    private void Fall()
+    {
+        
     }
 }
