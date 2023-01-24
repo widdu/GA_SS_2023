@@ -360,18 +360,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2716751389322026146, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4570286017667827341, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4570286017667827341, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -5
-      objectReference: {fileID: 0}
     - target: {fileID: 4570286018833190624, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
       propertyPath: m_Name
       value: Stage
@@ -424,13 +412,5 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 611901013}
-    - target: {fileID: 4570286018833190626, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
-      propertyPath: playerTransform
-      value: 
-      objectReference: {fileID: 879171343}
-    - target: {fileID: 6440844489628114844, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}

@@ -10,8 +10,11 @@ public class PlayerController : MonoBehaviour
 
     // Private values
     private PlayerCollider playerCollider;
-    private Vector3 movement, targetPosition, startPointDistanceToTrackStartPoint;
+    private Vector3 playerOriginalPosition, movement, targetPosition, startPointDistanceToTrackStartPoint;
     private float movementSpeed, trackAngle, movementSpeedSlopeSubtraction;
+    private bool waitForRelease = false;
+
+    public bool WaitForRelease { get { return waitForRelease; } set { waitForRelease = value; } }
 
     private enum Path
     {
@@ -33,6 +36,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        playerOriginalPosition = transform.localPosition;
+
         path = Path.Start;
     }
 
@@ -115,8 +120,6 @@ public class PlayerController : MonoBehaviour
             movement = direction * Time.deltaTime;
             targetPosition = startPointDistanceToTrackStartPoint + transform.position;
         }
-
-        // TODO: direction, movement and targetPosition setting in SetMovement() method!
     }
 
     private void MovementTargetTrack(Vector2 moveInput)
@@ -131,12 +134,16 @@ public class PlayerController : MonoBehaviour
             movement = direction * Time.deltaTime;
             targetPosition = movement + transform.position;
         //}
-
-        // TODO: direction, movement and targetPosition setting in SetMovement() method!
     }
 
-    private void SetMovement(float moveInputX, float moveInputY)
+    private void OnTriggerEnter(Collider collider)
     {
-
+        if(collider.gameObject.name == "End")
+        {
+            transform.localPosition = playerOriginalPosition;
+            targetPosition = Vector3.zero;
+            path = Path.Start;
+            waitForRelease = true;
+        }
     }
 }

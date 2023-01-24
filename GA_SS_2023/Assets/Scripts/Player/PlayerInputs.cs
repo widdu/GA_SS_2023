@@ -24,7 +24,11 @@ public class PlayerInputs : MonoBehaviour
     private void Update()
     {
         //Debug.Log(moveInput);
-        if(moveInput != Vector2.zero)
+        if(moveInput == Vector2.zero && playerController.WaitForRelease)
+        {
+            playerController.WaitForRelease = false;
+        }
+        else if(moveInput != Vector2.zero && !playerController.WaitForRelease)
         {
             playerController.MovementSwitch(moveInput);
         }

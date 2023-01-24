@@ -24,8 +24,6 @@ public class StageController : MonoBehaviour
     // Private variables.
     private PlayerController playerController;
 
-    private Transform playerTransform;
-
     // Start platform point transforms.
     private Vector3 startLeftTargetPosition, startMiddleTargetPosition, startRightTargetPosition;
 
@@ -34,9 +32,6 @@ public class StageController : MonoBehaviour
 
     // Track end point transforms.
     private Vector3 trackEndLeftTargetPosition, trackEndMiddleTargetPosition, trackEndRightTargetPosition;
-
-    // Player transform values.
-    private Vector3 playerOriginalPosition;
 
     // Track platform group transform values.
     private float trackOriginalPositionY, trackOriginalPositionZ, trackOriginalScaleZ;
@@ -50,12 +45,6 @@ public class StageController : MonoBehaviour
         if(playerController == null)
         {
             Debug.LogWarning("Can't find player controller component for stage controller component!");
-        }
-
-        playerTransform = player.GetComponent<Transform>();
-        if (playerTransform == null)
-        {
-            Debug.LogWarning("Can't find player object's transform component for stage controller component!");
         }
     }
 
@@ -78,8 +67,6 @@ public class StageController : MonoBehaviour
         trackEndRightTargetPosition = trackEndRightTransform.position;
 
         // Get original values.
-        // Player values.
-        playerOriginalPosition = playerTransform.localPosition;
 
         // Track platform group values.
         trackOriginalScaleZ = trackPlatformGroupTransform.localScale.z;
