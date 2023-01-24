@@ -23,12 +23,15 @@ public class PlayerInputs : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        
+        //Debug.Log(moveInput);
+        if(moveInput != Vector2.zero)
+        {
+            playerController.MovementSwitch(moveInput);
+        }
     }
 
     public void Move(InputAction.CallbackContext callback)
     {
         moveInput = callback.ReadValue<Vector2>();
-        playerController.MovementSwitch(moveInput);
     }
 }

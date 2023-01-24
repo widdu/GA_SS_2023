@@ -43,11 +43,6 @@ public class PlayerController : MonoBehaviour
         {
             MoveCharacter();
         }
-
-        if(!playerCollider.IsActive)
-        {
-            Fall();
-        }
     }
 
     public void Setup(Vector3 startPointRightTransformPosition, float startPointMiddleTransformPositionX, float trackStartRightTargetPositionZ, float trackPlatformGroupLocalEulerAngleX)
@@ -78,25 +73,30 @@ public class PlayerController : MonoBehaviour
         else
         {
             transform.position = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
-            targetPosition = Vector2.zero;
 
-            transform.localEulerAngles = new Vector3(trackAngle * (int)path, transform.rotation.y, transform.rotation.z);
+            if(targetPosition.z > 0)
+            {
+                path = Path.Track;
+                transform.localEulerAngles = new Vector3(trackAngle * (int)path, transform.rotation.y, transform.rotation.z);
+            }
+
+            targetPosition = Vector2.zero;
         }
     }
 
     public void MovementSwitch(Vector2 moveInput)
     {
-        if (targetPosition == Vector3.zero)
+        switch (path)
         {
-            switch (path)
-            {
-                case Path.Start:
+            case Path.Start:
+                if (targetPosition == Vector3.zero)
+                {
                     MovementTargetStart(moveInput);
-                    break;
-                case Path.Track:
-                    MovementTargetTrack(moveInput);
-                    break;
-            }
+                }
+                break;
+            case Path.Track:
+                MovementTargetTrack(moveInput);
+                break;
         }
     }
 
@@ -114,17 +114,29 @@ public class PlayerController : MonoBehaviour
             Vector3 direction = new Vector3(0f, 0f, moveInput.y) * movementSpeed;
             movement = direction * Time.deltaTime;
             targetPosition = startPointDistanceToTrackStartPoint + transform.position;
-            path = Path.Track;
         }
+
+        // TODO: direction, movement and targetPosition setting in SetMovement() method!
     }
 
     private void MovementTargetTrack(Vector2 moveInput)
     {
+        /*if (moveInput.x != 0) // Prioritize horizontal movement on start platform.
+        {
+            
+        }
+        else
+        {*/
+            Vector3 direction = new Vector3(0f, 0f, moveInput.y) * movementSpeed;
+            movement = direction * Time.deltaTime;
+            targetPosition = movement + transform.position;
+        //}
 
+        // TODO: direction, movement and targetPosition setting in SetMovement() method!
     }
 
-    private void Fall()
+    private void SetMovement(float moveInputX, float moveInputY)
     {
-        
+
     }
 }

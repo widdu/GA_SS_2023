@@ -8,7 +8,7 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Transform targetObjectTransform;
 
     private Vector3 originalCameraPosition;
-    private float originalDistanceY, distanceY, newDistanceY;
+    private float originalDistanceY;
 
     private void Awake()
     {
@@ -25,9 +25,7 @@ public class CameraFollow : MonoBehaviour
     // Update is called once per frame.
     private void Update()
     {
-        distanceY = transform.position.y - targetObjectTransform.position.y;
-        newDistanceY = originalDistanceY + (originalDistanceY - distanceY);
-        float cameraPositionY = (distanceY < originalDistanceY) ? newDistanceY : originalCameraPosition.y;
+        float cameraPositionY = (targetObjectTransform.position.y + originalDistanceY <= originalCameraPosition.y) ? originalCameraPosition.y : targetObjectTransform.position.y + originalDistanceY;
         float cameraPositionZ = originalCameraPosition.z + targetObjectTransform.position.z;
         transform.position = new Vector3(transform.position.x, cameraPositionY, cameraPositionZ);
     }
