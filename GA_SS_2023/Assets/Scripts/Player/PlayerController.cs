@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     // Private values
     private PlayerCollider playerCollider;
     private IMover mover;
+    private Coroutine toggleIsJumping;
     private Vector3 playerOriginalPosition, movement, targetPosition, startPointDistanceToTrackStartPoint, distanceBetweenTracks;
     private float movementSpeed, trackAngle, movementSpeedSlopeSubtraction;
     private bool waitForRelease = false/*, queueJump = false, isJumping = false*/, switchingTrack = false;
@@ -87,7 +88,7 @@ public class PlayerController : MonoBehaviour
             if (path == Path.Track && playerCollider.IsActive && !isJumping)
             {
                 mover.Jump(jumpHeight);
-                StartCoroutine(ToggleIsJumping());
+                toggleIsJumping = StartCoroutine(ToggleIsJumping());
                 queueJump = false;
             }
         }
@@ -97,6 +98,7 @@ public class PlayerController : MonoBehaviour
     {
         yield return !playerCollider.IsActive;
         isJumping = true;
+        StopCoroutine(toggleIsJumping);
     }
 
     public void Setup(Vector3 startPointRightTransformPosition, float startPointMiddleTransformPositionX, Vector3 trackStartRightTargetPosition, Vector3 trackStartMiddleTargetPosition, float trackPlatformGroupLocalEulerAngleX)
