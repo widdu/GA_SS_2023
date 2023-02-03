@@ -18,6 +18,9 @@ public class StageController : MonoBehaviour
     // Track end points.
     [SerializeField] private Transform trackEndLeftTransform, trackEndMiddleTransform, trackEndRightTransform;
 
+    // Abyss collider transform
+    [SerializeField] private Transform abyssTransform;
+
     [SerializeField] private TrackPropertyDistribution trackPropertyDistribution;
     [SerializeField] private float platformDistanceAddition;
 
@@ -38,6 +41,9 @@ public class StageController : MonoBehaviour
 
     // Ball platform values.
     private float ballPlatformOriginalPositionZ, ballPlatformOriginalPositionY, ballPlatformOriginalScaleY;
+
+    // Abyss values.
+    private float abyssTransformOriginalScaleZ;
 
     private void Awake()
     {
@@ -81,10 +87,13 @@ public class StageController : MonoBehaviour
         ballPlatformOriginalPositionY = ballPlatformTransform.transform.localPosition.y;
         ballPlatformOriginalPositionZ = ballPlatformTransform.transform.localPosition.z;
 
+        // Abyss values.
+        abyssTransformOriginalScaleZ = abyssTransform.localScale.z;
+
         // Reset platform distance addition upon starting the game.
         platformDistanceAddition = 0f;
 
-        playerController.Setup(startRightTargetPosition, startMiddleTargetPosition.x, trackStartRightTargetPosition.z, trackPlatformGroupTransform.localEulerAngles.x);
+        playerController.Setup(startRightTargetPosition, startMiddleTargetPosition.x, trackStartRightTargetPosition, trackStartMiddleTargetPosition, trackPlatformGroupTransform.localEulerAngles.x);
     }
 
     // Update is called once per frame.
@@ -130,6 +139,8 @@ public class StageController : MonoBehaviour
 
             // X / ballPlatformTransform.localPosition.z = ballPlatformOriginalPositionY / ballPlatformOriginalPositionZ.
             ballPlatformTransform.localPosition = new Vector3(ballPlatformTransform.localPosition.x, UpdateStageObjects(ballPlatformOriginalPositionY), ballPlatformTransform.localPosition.z);
+
+            abyssTransform.localScale = new Vector3(abyssTransform.localScale.x, abyssTransform.localScale.y, abyssTransformOriginalScaleZ + platformDistanceAddition);
     }
 
     private float UpdateStageObjects(float original)

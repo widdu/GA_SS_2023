@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6353030484933011847}
   - component: {fileID: 2855901273993919490}
   - component: {fileID: 1484270924157455436}
+  - component: {fileID: 6799577335587787182}
   - component: {fileID: 1362387069022317913}
   - component: {fileID: 2731002685450014311}
   m_Layer: 0
@@ -80,7 +81,19 @@ MonoBehaviour:
     m_ActionId: 88d837db-56ea-4f63-9619-b769031cb0a7
     m_ActionName: Play/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6353030484933011847}
+        m_TargetAssemblyTypeName: PlayerInputs, Assembly-CSharp
+        m_MethodName: Jump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 6cd35b6c-595a-47a3-b954-f8eed599a2d5
     m_ActionName: Play/Jump
   m_NeverAutoSwitchControlSchemes: 0
@@ -112,6 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c147852118274544cb2c6b9632ddf88a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpHeight: 1
 --- !u!114 &1484270924157455436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,6 +139,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collisionCount: 0
+--- !u!114 &6799577335587787182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2731002685779466607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b085e5d1989f4f3478ce205f73c37259, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &1362387069022317913
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -153,7 +179,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 122
-  m_CollisionDetection: 2
+  m_CollisionDetection: 0
 --- !u!1001 &2731002686154377873
 PrefabInstance:
   m_ObjectHideFlags: 0

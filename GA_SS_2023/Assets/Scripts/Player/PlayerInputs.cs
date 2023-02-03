@@ -23,14 +23,14 @@ public class PlayerInputs : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        //Debug.Log(moveInput);
-        if(moveInput == Vector2.zero && playerController.WaitForRelease)
+        // Debug.Log(moveInput);
+        if (moveInput == Vector2.zero && playerController.WaitForRelease)
         {
             playerController.WaitForRelease = false;
         }
         else if(moveInput != Vector2.zero && !playerController.WaitForRelease)
         {
-            playerController.MovementSwitch(moveInput);
+            playerController.MovementSwitch(new Vector2(Mathf.Round(moveInput.x), Mathf.Round(moveInput.y)));
         }
     }
 
@@ -38,4 +38,12 @@ public class PlayerInputs : MonoBehaviour
     {
         moveInput = callback.ReadValue<Vector2>();
     }
+    public void Jump(InputAction.CallbackContext callBackContext)
+    {
+        if (callBackContext.phase == InputActionPhase.Performed && !playerController.IsJumping)
+        {
+            playerController.QueueJump = true;
+        }
+    }
+
 }

@@ -138,10 +138,10 @@
                 {
                     "name": "",
                     "id": "1ccaa027-016c-477e-aeb3-a73b3f26b06f",
-                    "path": "",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
