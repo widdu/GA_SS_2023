@@ -25,7 +25,8 @@ public class PlayerController : MonoBehaviour
     public bool IsJumping { get { return isJumping; } set { isJumping = value; } }
 
     public bool SwitchingTrack { get { return switchingTrack; } set { switchingTrack = value; } }
-
+    public GameObject Fade;
+    public FadeScript fadeScript;
     private enum Path
     {
         Start, // 0
@@ -61,6 +62,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        fadeScript = Fade.GetComponent<FadeScript>();
         playerOriginalPosition = transform.localPosition;
 
         path = Path.Start;
@@ -201,11 +203,17 @@ public class PlayerController : MonoBehaviour
 
     public void ReachGoal()
     {
+        fadeScript.FadeOut();
         transform.localPosition = playerOriginalPosition;
         targetPosition = Vector3.zero;
         path = Path.Start;
         track = Track.Middle;
         waitForRelease = true;
+        DoFade();
+        fadeScript.FadeIn();
+    }
+    IEnumerator DoFade(){
+        yield return new WaitForSeconds(2);
     }
 
     public void AbyssReset()
@@ -217,4 +225,6 @@ public class PlayerController : MonoBehaviour
         track = Track.Middle;
         waitForRelease = true;
     }
+
+
 }
