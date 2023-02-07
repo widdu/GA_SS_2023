@@ -32,7 +32,8 @@ public class PlayerCollider : MonoBehaviour
 
         if (collision.gameObject.name == "End")
         {
-            playerController.ReachGoal();
+            GoalScore goalScore = collision.gameObject.GetComponent<GoalScore>();
+            playerController.ReachGoal(goalScore);
         }
 
         if (collision.gameObject.name == "Abyss")

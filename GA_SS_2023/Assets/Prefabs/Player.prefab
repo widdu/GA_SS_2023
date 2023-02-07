@@ -126,6 +126,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpHeight: 1
+  scoreBoard: {fileID: 0}
+  isJumping: 0
+  Fade: {fileID: 0}
+  fadeScript: {fileID: 0}
 --- !u!114 &1484270924157455436
 MonoBehaviour:
   m_ObjectHideFlags: 0

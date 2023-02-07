@@ -8,15 +8,17 @@ public class PlayerController : MonoBehaviour
     // Serialized private values
     // [SerializeField] private Vector3 movement;    Inspectable value while uncommented
     [SerializeField] private float jumpHeight = 2;
+    [SerializeField] ScoreBoard scoreBoard;
 
     // Private values
     private PlayerCollider playerCollider;
     private IMover mover;
     private Coroutine toggleIsJumping;
+    private Animator animator;
     private Vector3 playerOriginalPosition, movement, targetPosition, startPointDistanceToTrackStartPoint, distanceBetweenTracks;
     private float movementSpeed, trackAngle, movementSpeedSlopeSubtraction;
-    private bool waitForRelease = false/*, queueJump = false, isJumping = false*/, switchingTrack = false;
-    public bool queueJump = false, isJumping = false;
+    private bool waitForRelease = false, queueJump = false, /*isJumping = false,*/ switchingTrack = false;
+    public bool isJumping = false;
 
     public bool WaitForRelease { get { return waitForRelease; } set { waitForRelease = value; } }
 
@@ -57,6 +59,12 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogWarning("Can't find the IMover interface!");
         }
+
+        animator = GetComponentInChildren<Animator>();
+        if(animator == null)
+        {
+            Debug.LogWarning("Can't find player object child's animator component for player controller component!");
+        }
     }
 
     // Start is called before the first frame update
@@ -77,10 +85,13 @@ public class PlayerController : MonoBehaviour
         {
             MoveCharacter();
         }
-        if (playerCollider.IsActive && isJumping)
+        if (playerCollider.IsActive && isJumping && path == Path.Track)
         {
             isJumping = false;
+            animator.Play("Idle and Move");
         }
+        /*animator.SetFloat("MoveX", movement.normalized.z);
+        animator.SetFloat("MoveZ", movement.normalized.x);*/
     }
 
     private void FixedUpdate()
@@ -100,6 +111,7 @@ public class PlayerController : MonoBehaviour
     {
         yield return !playerCollider.IsActive;
         isJumping = true;
+        animator.SetTrigger("JumpTrigger");
         StopCoroutine(toggleIsJumping);
     }
 
@@ -142,6 +154,7 @@ public class PlayerController : MonoBehaviour
             }
 
             targetPosition = Vector2.zero;
+            animator.SetFloat("MoveZ", 0);
         }
     }
 
@@ -169,6 +182,7 @@ public class PlayerController : MonoBehaviour
             movement = direction * Time.deltaTime;
             targetPosition = direction + transform.position;
             track = track + (int)moveInput.x;
+            animator.SetFloat("MoveZ", moveInput.x);
         }
         else if(moveInput.x == 0 && moveInput.y != 0)
         {
@@ -176,6 +190,7 @@ public class PlayerController : MonoBehaviour
             Vector3 direction = new Vector3(0f, 0f, moveInput.y) * movementSpeed;
             movement = direction * Time.deltaTime;
             targetPosition = startPointDistanceToTrackStartPoint + transform.position;
+            toggleIsJumping = StartCoroutine(ToggleIsJumping());
         }
     }
 
@@ -192,7 +207,7 @@ public class PlayerController : MonoBehaviour
                 switchingTrack = true;
                 track = track + (int)moveInput.x;
             }
-            else if (moveInput.x == 0 && moveInput.y != 0)
+            else if (moveInput.x == 0 && moveInput.y != 0 && targetPosition == Vector3.zero)
             {
                 Vector3 direction = new Vector3(0f, 0f, moveInput.y) * movementSpeed;
                 movement = direction * Time.deltaTime;
@@ -201,7 +216,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void ReachGoal()
+    public void ReachGoal(GoalScore goalScore)
     {
         fadeScript.FadeOut();
         transform.localPosition = playerOriginalPosition;
@@ -209,6 +224,8 @@ public class PlayerController : MonoBehaviour
         path = Path.Start;
         track = Track.Middle;
         waitForRelease = true;
+        goalScore.Score += 1;
+        scoreBoard.UpdateScore();
         DoFade();
         fadeScript.FadeIn();
     }
@@ -219,12 +236,26 @@ public class PlayerController : MonoBehaviour
     public void AbyssReset()
     {
         // TODO: Record and reset score, restart run
+        fadeScript.FadeOut();
         transform.localPosition = playerOriginalPosition;
         targetPosition = Vector3.zero;
         path = Path.Start;
         track = Track.Middle;
         waitForRelease = true;
+        scoreBoard.ResetScore();
+        DoFade();
+        fadeScript.FadeIn();
     }
 
-
+    public void AnimatorSetFloat(Vector2 moveInput)
+    {
+        if(path == Path.Track && !isJumping)
+        {
+            animator.SetFloat("MoveX", moveInput.y);
+        }
+        else
+        {
+            animator.SetFloat("MoveX", 0);
+        }
+    }
 }
