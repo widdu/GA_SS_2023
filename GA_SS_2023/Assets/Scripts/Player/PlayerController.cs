@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     // Private values
     private PlayerCollider playerCollider;
     private IMover mover;
+    private Coroutine toggleIsJumping;
     private Vector3 playerOriginalPosition, movement, targetPosition, startPointDistanceToTrackStartPoint, distanceBetweenTracks;
     private float movementSpeed, trackAngle, movementSpeedSlopeSubtraction;
     private bool waitForRelease = false/*, queueJump = false, isJumping = false*/, switchingTrack = false;
@@ -24,7 +25,8 @@ public class PlayerController : MonoBehaviour
     public bool IsJumping { get { return isJumping; } set { isJumping = value; } }
 
     public bool SwitchingTrack { get { return switchingTrack; } set { switchingTrack = value; } }
-
+    public GameObject Fade;
+    public FadeScript fadeScript;
     private enum Path
     {
         Start, // 0
@@ -60,6 +62,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        fadeScript = Fade.GetComponent<FadeScript>();
         playerOriginalPosition = transform.localPosition;
 
         path = Path.Start;
@@ -87,7 +90,7 @@ public class PlayerController : MonoBehaviour
             if (path == Path.Track && playerCollider.IsActive && !isJumping)
             {
                 mover.Jump(jumpHeight);
-                StartCoroutine(ToggleIsJumping());
+                toggleIsJumping = StartCoroutine(ToggleIsJumping());
                 queueJump = false;
             }
         }
@@ -97,6 +100,7 @@ public class PlayerController : MonoBehaviour
     {
         yield return !playerCollider.IsActive;
         isJumping = true;
+        StopCoroutine(toggleIsJumping);
     }
 
     public void Setup(Vector3 startPointRightTransformPosition, float startPointMiddleTransformPositionX, Vector3 trackStartRightTargetPosition, Vector3 trackStartMiddleTargetPosition, float trackPlatformGroupLocalEulerAngleX)
@@ -199,11 +203,17 @@ public class PlayerController : MonoBehaviour
 
     public void ReachGoal()
     {
+        fadeScript.FadeOut();
         transform.localPosition = playerOriginalPosition;
         targetPosition = Vector3.zero;
         path = Path.Start;
         track = Track.Middle;
         waitForRelease = true;
+        DoFade();
+        fadeScript.FadeIn();
+    }
+    IEnumerator DoFade(){
+        yield return new WaitForSeconds(2);
     }
 
     public void AbyssReset()
@@ -215,4 +225,6 @@ public class PlayerController : MonoBehaviour
         track = Track.Middle;
         waitForRelease = true;
     }
+
+
 }
