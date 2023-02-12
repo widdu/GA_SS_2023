@@ -6,6 +6,7 @@ public class PlayerCollider : MonoBehaviour
 {
     private PlayerController playerController;
     private BoxCollider boxCollider;
+    private int hazardLayer = 7;
 
     public int collisionCount = 0;
 
@@ -30,15 +31,9 @@ public class PlayerCollider : MonoBehaviour
     {
         collisionCount++;
 
-        if (collision.gameObject.name == "End")
+        if(collision.gameObject.layer == hazardLayer)
         {
-            GoalScore goalScore = collision.gameObject.GetComponent<GoalScore>();
-            playerController.ReachGoal(goalScore);
-        }
-
-        if (collision.gameObject.name == "Abyss")
-        {
-            playerController.AbyssReset();
+            playerController.ResetLevel();
         }
 
         playerController.SwitchingTrack = false;
@@ -47,5 +42,19 @@ public class PlayerCollider : MonoBehaviour
     private void OnCollisionExit(Collision collision)
     {
         collisionCount--;
+    }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.name == "End")
+        {
+            GoalScore goalScore = collider.gameObject.GetComponent<GoalScore>();
+            playerController.ReachGoal(goalScore);
+        }
+
+        if (collider.gameObject.name == "Abyss")
+        {
+            playerController.ResetLevel();
+        }
     }
 }

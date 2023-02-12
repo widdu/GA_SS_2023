@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class PlayerController : MonoBehaviour
     // [SerializeField] private Vector3 movement;    Inspectable value while uncommented
     [SerializeField] private float jumpHeight = 2;
     [SerializeField] ScoreBoard scoreBoard;
+    [SerializeField] private List<BarrelSpawner> barrelSpawnerList;
 
     // Private values
     private PlayerCollider playerCollider;
@@ -17,8 +19,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private Vector3 playerOriginalPosition, movement, targetPosition, startPointDistanceToTrackStartPoint, distanceBetweenTracks;
     private float movementSpeed, trackAngle, movementSpeedSlopeSubtraction;
-    private bool waitForRelease = false, queueJump = false, /*isJumping = false,*/ switchingTrack = false;
-    public bool isJumping = false;
+    private bool waitForRelease = false, queueJump = false, isJumping = false, switchingTrack = false;
 
     public bool WaitForRelease { get { return waitForRelease; } set { waitForRelease = value; } }
 
@@ -226,30 +227,38 @@ public class PlayerController : MonoBehaviour
         waitForRelease = true;
         goalScore.Score += 1;
         scoreBoard.UpdateScore();
+        ResetBarrelSpawners();
         DoFade();
         fadeScript.FadeIn();
     }
+
+    private void ResetBarrelSpawners()
+    {
+        foreach(BarrelSpawner barrelSpawner in barrelSpawnerList)
+        {
+            barrelSpawner.DestroyAllBarrels();
+        }
+    }
+
     IEnumerator DoFade(){
         yield return new WaitForSeconds(2);
     }
 
-    public void AbyssReset()
+    public void ResetLevel()
     {
         // TODO: Record and reset score, restart run
         fadeScript.FadeOut();
-        transform.localPosition = playerOriginalPosition;
-        targetPosition = Vector3.zero;
-        path = Path.Start;
-        track = Track.Middle;
-        waitForRelease = true;
-        scoreBoard.ResetScore();
+
+        // TODO: Move the line below to scene managing script!
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
         DoFade();
         fadeScript.FadeIn();
     }
 
     public void AnimatorSetFloat(Vector2 moveInput)
     {
-        if(path == Path.Track && !isJumping)
+        if(path == Path.Track && !isJumping && !switchingTrack)
         {
             animator.SetFloat("MoveX", moveInput.y);
         }
