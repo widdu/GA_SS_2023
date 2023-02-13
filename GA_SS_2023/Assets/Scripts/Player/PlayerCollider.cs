@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class PlayerCollider : MonoBehaviour
 {
+    // Private variables
     private PlayerController playerController;
     private BoxCollider boxCollider;
     private int hazardLayer = 7;
 
-    public int collisionCount = 0;
+    public int collisionCount = 0; // Make this private
 
+    // Properties
     public bool IsActive { get { return collisionCount > 0; } }
 
     private void Awake()

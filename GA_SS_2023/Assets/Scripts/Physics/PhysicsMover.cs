@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PhysicsMover : MonoBehaviour, IMover
 {
+    // Private variables
     private new Rigidbody rigidbody;
 
     private void Awake()

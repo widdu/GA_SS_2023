@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Barrel : MonoBehaviour
 {
+    // Private variables
     private BarrelSpawner myBarrelSpawner;
 
     public BarrelSpawner MyBarrelSpawner

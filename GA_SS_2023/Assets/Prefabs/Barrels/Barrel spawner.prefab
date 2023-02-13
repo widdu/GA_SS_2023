@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 681c0dd7ee32a974a82fb53ab90e891f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  barrelSpawnTimer: 3
+  barrelSpawnTimer: 2
   prefabBarrel: {fileID: 4607640115271958735, guid: 62cb6a5a09636cf40baae3b7025068ee, type: 3}
+  barrelList: []

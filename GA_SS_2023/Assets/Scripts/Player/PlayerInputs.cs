@@ -41,7 +41,7 @@ public class PlayerInputs : MonoBehaviour
     }
     public void Jump(InputAction.CallbackContext callBackContext)
     {
-        if (callBackContext.phase == InputActionPhase.Performed && !playerController.IsJumping)
+        if (callBackContext.phase == InputActionPhase.Performed && !playerController.IsJumping && playerController.PathPath == PlayerController.Path.Track)
         {
             playerController.QueueJump = true;
         }

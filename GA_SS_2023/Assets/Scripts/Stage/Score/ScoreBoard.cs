@@ -5,11 +5,11 @@ using TMPro;
 
 public class ScoreBoard : MonoBehaviour
 {
-    [SerializeField]
-    private GoalScore[] endGoals = new GoalScore[3];
+    // Serialized variables
+    [SerializeField] private GoalScore[] endGoals = new GoalScore[3];
 
+    // Private variables
     private TMP_Text text;
-
     private int totalScore;
 
     private void Awake()

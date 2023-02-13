@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class TrackPropertyDistribution : MonoBehaviour
 {
-    // Serialized private variables.
-
     // Private variables
     private float originalTrackPlatformGroupScaleZ;
 

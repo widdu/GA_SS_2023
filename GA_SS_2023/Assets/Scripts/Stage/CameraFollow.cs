@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    // Serialized private variables.
+    // Serialized variables.
     [SerializeField] private Transform targetObjectTransform;
 
+    // Private variables
     private Vector3 originalCameraPosition;
     private float originalDistanceY;
 

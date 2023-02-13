@@ -5,15 +5,20 @@ using UnityEngine;
 
 public class BarrelSpawner : MonoBehaviour
 {
-    private Coroutine waitBarrelSpawn;
+    // Serialized variables
     [SerializeField] private int barrelSpawnTimer = 3;
     [SerializeField] private GameObject prefabBarrel;
-    public List<GameObject> barrelList;
+
+    // Private variables
+    private Coroutine waitBarrelSpawn;
+
+    // Public variables
+    public List<GameObject> barrelList; // Not sure yet why this doesn't work as private with public property.
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
-        
+        waitBarrelSpawn = null;
     }
 
     // Update is called once per frame
@@ -28,12 +33,17 @@ public class BarrelSpawner : MonoBehaviour
     private IEnumerator WaitBarrelSpawn()
     {
         yield return new WaitForSeconds(barrelSpawnTimer);
+        SpawnBarrel();
+        StopCoroutine(waitBarrelSpawn);
+        waitBarrelSpawn = null;
+    }
+
+    public void SpawnBarrel()
+    {
         GameObject spawnedBarrel = Instantiate(prefabBarrel, transform.position, transform.rotation);
         Barrel spawnedBarrelScript = spawnedBarrel.GetComponent<Barrel>();
         spawnedBarrelScript.MyBarrelSpawner = this;
         barrelList.Add(spawnedBarrel);
-        StopCoroutine(waitBarrelSpawn);
-        waitBarrelSpawn = null;
     }
 
     public void DestroyBarrel(GameObject barrel)
@@ -49,5 +59,10 @@ public class BarrelSpawner : MonoBehaviour
             Destroy(barrelList[i]);
         }
         barrelList.Clear();
+    }
+
+    public void DeactivateMe()
+    {
+        gameObject.SetActive(false);
     }
 }
