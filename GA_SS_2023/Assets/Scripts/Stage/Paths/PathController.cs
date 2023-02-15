@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PathController : MonoBehaviour
 {
-    // Serialized private variables
+    // Serialized variables
     //[SerializeField] private Transform myPathTransform; // obsolete?
 
     // Private variables

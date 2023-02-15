@@ -2,22 +2,26 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    // Serialized private values
-    // [SerializeField] private Vector3 movement;    Inspectable value while uncommented
-    [SerializeField] private float jumpHeight = 2;
+    // Serialized variables
+    [SerializeField] private Vector3 movement;    // Inspectable value while uncommented
+    [SerializeField] private float jumpHeight = 2, movementSpeedSlopeSubtraction, timeScale;
+    [SerializeField] ScoreBoard scoreBoard;
+    [SerializeField] private List<BarrelSpawner> barrelSpawnerList;
 
-    // Private values
+    // Private variables
     private PlayerCollider playerCollider;
     private IMover mover;
     private Coroutine toggleIsJumping;
-    private Vector3 playerOriginalPosition, movement, targetPosition, startPointDistanceToTrackStartPoint, distanceBetweenTracks;
-    private float movementSpeed, trackAngle, movementSpeedSlopeSubtraction;
-    private bool waitForRelease = false/*, queueJump = false, isJumping = false*/, switchingTrack = false;
-    public bool queueJump = false, isJumping = false;
-
+    private Animator animator;
+    private Vector3 playerOriginalPosition, /*movement,*/ targetPosition, startPointDistanceToTrackStartPoint, distanceBetweenTracks;
+    private float movementSpeed, trackAngle/*, movementSpeedSlopeSubtraction*/, lastDistance;
+    private bool waitForRelease = true, queueJump = false, isJumping = false, switchingTrack = false;
+    
+    // Properties
     public bool WaitForRelease { get { return waitForRelease; } set { waitForRelease = value; } }
 
     public bool QueueJump { get { return queueJump; } set { queueJump = value; } }
@@ -25,9 +29,12 @@ public class PlayerController : MonoBehaviour
     public bool IsJumping { get { return isJumping; } set { isJumping = value; } }
 
     public bool SwitchingTrack { get { return switchingTrack; } set { switchingTrack = value; } }
+
+    // Public variables
     public GameObject Fade;
     public FadeScript fadeScript;
-    private enum Path
+
+    public enum Path
     {
         Start, // 0
         Track // 1
@@ -35,7 +42,12 @@ public class PlayerController : MonoBehaviour
 
     private Path path;
 
-    private enum Track
+    public Path PathPath
+    {
+        get { return path; }
+    }
+
+    public enum Track
     {
         Left = -1,
         Middle = 0, // 1
@@ -57,6 +69,12 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogWarning("Can't find the IMover interface!");
         }
+
+        animator = GetComponentInChildren<Animator>();
+        if(animator == null)
+        {
+            Debug.LogWarning("Can't find player object child's animator component for player controller component!");
+        }
     }
 
     // Start is called before the first frame update
@@ -77,17 +95,22 @@ public class PlayerController : MonoBehaviour
         {
             MoveCharacter();
         }
-        if (playerCollider.IsActive && isJumping)
+        if (playerCollider.IsActive && isJumping && path == Path.Track)
         {
             isJumping = false;
+            animator.Play("Idle and Move");
         }
+        /*animator.SetFloat("MoveX", movement.normalized.z);
+        animator.SetFloat("MoveZ", movement.normalized.x);*/
+
+        Time.timeScale = timeScale;
     }
 
     private void FixedUpdate()
     {
         if (queueJump)
         {
-            if (path == Path.Track && playerCollider.IsActive && !isJumping)
+            if (path == Path.Track && playerCollider.IsActive && !isJumping && toggleIsJumping == null)
             {
                 mover.Jump(jumpHeight);
                 toggleIsJumping = StartCoroutine(ToggleIsJumping());
@@ -98,9 +121,11 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator ToggleIsJumping()
     {
-        yield return !playerCollider.IsActive;
+        yield return new WaitUntil(() => !playerCollider.IsActive);
         isJumping = true;
+        animator.SetTrigger("JumpTrigger");
         StopCoroutine(toggleIsJumping);
+        toggleIsJumping = null;
     }
 
     public void Setup(Vector3 startPointRightTransformPosition, float startPointMiddleTransformPositionX, Vector3 trackStartRightTargetPosition, Vector3 trackStartMiddleTargetPosition, float trackPlatformGroupLocalEulerAngleX)
@@ -118,7 +143,7 @@ public class PlayerController : MonoBehaviour
         trackAngle = trackPlatformGroupLocalEulerAngleX;
 
         // Subtract the effect of the slope on the track from movement speed and save it to the following variable.
-        movementSpeedSlopeSubtraction = movementSpeed - ((360 - Mathf.Abs(trackAngle)) * movementSpeed / 360);
+        movementSpeedSlopeSubtraction = movementSpeed - (movementSpeed - ((360 - Mathf.Abs(trackAngle)) * movementSpeed / 360));
     }
 
     private void MoveCharacter()
@@ -127,11 +152,14 @@ public class PlayerController : MonoBehaviour
         Vector2 targetPositionXZ = new Vector2(targetPosition.x, targetPosition.z);
         float distance = Vector2.Distance(playerPositionXZ, targetPositionXZ);
 
-        if (Mathf.Max(Mathf.Abs(movement.x), Mathf.Abs(movement.z)) < distance)
+        if (Mathf.Max(Mathf.Abs(movement.x), Mathf.Abs(movement.z)) <= distance && (lastDistance == 0 || (lastDistance != 0 && lastDistance > distance)))
         {
             transform.Translate(movement);
+            lastDistance = distance;
+
+            Debug.Log("MovementX: " + movement.x + " and distance: " + distance);
         }
-        else
+        else if(Mathf.Max(Mathf.Abs(movement.x), Mathf.Abs(movement.z)) > distance || (lastDistance != 0 && lastDistance < distance))
         {
             transform.position = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
 
@@ -142,6 +170,10 @@ public class PlayerController : MonoBehaviour
             }
 
             targetPosition = Vector2.zero;
+            animator.SetFloat("MoveZ", 0);
+            lastDistance = 0;
+
+            Debug.Log("Positioned on target!");
         }
     }
 
@@ -169,6 +201,7 @@ public class PlayerController : MonoBehaviour
             movement = direction * Time.deltaTime;
             targetPosition = direction + transform.position;
             track = track + (int)moveInput.x;
+            animator.SetFloat("MoveZ", moveInput.x);
         }
         else if(moveInput.x == 0 && moveInput.y != 0)
         {
@@ -176,6 +209,7 @@ public class PlayerController : MonoBehaviour
             Vector3 direction = new Vector3(0f, 0f, moveInput.y) * movementSpeed;
             movement = direction * Time.deltaTime;
             targetPosition = startPointDistanceToTrackStartPoint + transform.position;
+            toggleIsJumping = StartCoroutine(ToggleIsJumping());
         }
     }
 
@@ -192,39 +226,68 @@ public class PlayerController : MonoBehaviour
                 switchingTrack = true;
                 track = track + (int)moveInput.x;
             }
-            else if (moveInput.x == 0 && moveInput.y != 0)
+            else if (moveInput.x == 0 && moveInput.y != 0 && targetPosition == Vector3.zero)
             {
                 Vector3 direction = new Vector3(0f, 0f, moveInput.y) * movementSpeed;
-                movement = direction * Time.deltaTime;
+                movement = new Vector3(direction.x, direction.y, direction.z - movementSpeedSlopeSubtraction) * Time.deltaTime;
                 targetPosition = movement + transform.position;
             }
         }
     }
 
-    public void ReachGoal()
+    public void ReachGoal(GoalScore goalScore)
     {
         fadeScript.FadeOut();
         transform.localPosition = playerOriginalPosition;
         targetPosition = Vector3.zero;
         path = Path.Start;
         track = Track.Middle;
-        waitForRelease = true;
+        isJumping = false;
+        animator.ResetTrigger("JumpTrigger");
+        animator.Play("Idle and Move");
+        goalScore.Score += 1;
+        scoreBoard.UpdateScore();
+        ResetBarrelSpawners();
         DoFade();
         fadeScript.FadeIn();
+        waitForRelease = true;
+        lastDistance = 0;
     }
+
+    private void ResetBarrelSpawners()
+    {
+        foreach(BarrelSpawner barrelSpawner in barrelSpawnerList)
+        {
+            barrelSpawner.DestroyAllBarrels();
+            barrelSpawner.DeactivateMe();
+        }
+    }
+
     IEnumerator DoFade(){
         yield return new WaitForSeconds(2);
     }
 
-    public void AbyssReset()
+    public void ResetLevel()
     {
         // TODO: Record and reset score, restart run
-        transform.localPosition = playerOriginalPosition;
-        targetPosition = Vector3.zero;
-        path = Path.Start;
-        track = Track.Middle;
-        waitForRelease = true;
+        fadeScript.FadeOut();
+
+        // TODO: Move the line below to scene managing script!
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        DoFade();
+        fadeScript.FadeIn();
     }
 
-
+    public void AnimatorSetFloat(Vector2 moveInput)
+    {
+        if(path == Path.Track && !isJumping && !switchingTrack)
+        {
+            animator.SetFloat("MoveX", moveInput.y);
+        }
+        else
+        {
+            animator.SetFloat("MoveX", 0);
+        }
+    }
 }

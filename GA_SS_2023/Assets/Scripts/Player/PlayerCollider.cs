@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class PlayerCollider : MonoBehaviour
 {
+    // Private variables
+    private Transform playerTransform;
     private PlayerController playerController;
     private BoxCollider boxCollider;
+    private int hazardLayer = 7, trackLayer = 10;
 
-    public int collisionCount = 0;
+    public int collisionCount = 0; // Make this private
 
+    // Properties
     public bool IsActive { get { return collisionCount > 0; } }
 
     private void Awake()
     {
+        playerTransform = GetComponent<Transform>();
+        if (playerTransform == null)
+        {
+            Debug.LogWarning("Can't get player transform component for player object's player collider component!");
+        }
+
         playerController = GetComponent<PlayerController>();
         if (playerController == null)
         {
@@ -30,21 +40,40 @@ public class PlayerCollider : MonoBehaviour
     {
         collisionCount++;
 
-        if (collision.gameObject.name == "End")
+        if(collision.gameObject.layer == hazardLayer)
         {
-            playerController.ReachGoal();
-        }
-
-        if (collision.gameObject.name == "Abyss")
-        {
-            playerController.AbyssReset();
+            playerController.ResetLevel();
         }
 
         playerController.SwitchingTrack = false;
     }
 
+    private void OnCollisionStay(Collision collision)
+    {
+        if(collision.gameObject.layer == trackLayer)
+        {
+            TrackController trackController = collision.gameObject.GetComponent<TrackController>();
+            playerTransform.Translate(-trackController.TrackSpeedV3);
+        }
+    }
+
     private void OnCollisionExit(Collision collision)
     {
         collisionCount--;
+    }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.name == "End")
+        {
+            GoalScore goalScore = collider.gameObject.GetComponent<GoalScore>();
+            playerController.ReachGoal(goalScore);
+            goalScore.TrackController.UpdateTrackSpeed();
+        }
+
+        if (collider.gameObject.name == "Abyss")
+        {
+            playerController.ResetLevel();
+        }
     }
 }

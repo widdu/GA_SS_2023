@@ -32,6 +32,7 @@ public class PlayerInputs : MonoBehaviour
         {
             playerController.MovementSwitch(new Vector2(Mathf.Round(moveInput.x), Mathf.Round(moveInput.y)));
         }
+        playerController.AnimatorSetFloat(moveInput);
     }
 
     public void Move(InputAction.CallbackContext callback)
@@ -40,7 +41,7 @@ public class PlayerInputs : MonoBehaviour
     }
     public void Jump(InputAction.CallbackContext callBackContext)
     {
-        if (callBackContext.phase == InputActionPhase.Performed && !playerController.IsJumping)
+        if (callBackContext.phase == InputActionPhase.Performed && !playerController.IsJumping && playerController.PathPath == PlayerController.Path.Track)
         {
             playerController.QueueJump = true;
         }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class StageController : MonoBehaviour
 {
-    // Serialized private variables.
+    // Serialized variables.
     [SerializeField] private GameObject player;
     [SerializeField] private Transform trackPlatformGroupTransform, ballPlatformTransform, trackPathGroupTransform;
 
