@@ -593,7 +593,8 @@ GameObject:
   - component: {fileID: 4570286017970279853}
   - component: {fileID: 4570286017970279852}
   - component: {fileID: 4570286017970279851}
-  m_Layer: 0
+  - component: {fileID: 2054666431907316900}
+  m_Layer: 10
   m_Name: Middle track
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -678,6 +679,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2054666431907316900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4570286017970279849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85c81f6902a6b6c4fba28b74c7236e79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackSpeed: 0
 --- !u!1 &4570286018416953575
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,7 +704,8 @@ GameObject:
   - component: {fileID: 4570286018416954139}
   - component: {fileID: 4570286018416954138}
   - component: {fileID: 4570286018416954137}
-  m_Layer: 0
+  - component: {fileID: 6108822264248606991}
+  m_Layer: 10
   m_Name: Left track
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -775,6 +790,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6108822264248606991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4570286018416953575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85c81f6902a6b6c4fba28b74c7236e79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackSpeed: 0
 --- !u!1 &4570286018638235990
 GameObject:
   m_ObjectHideFlags: 0
@@ -821,7 +849,8 @@ GameObject:
   - component: {fileID: 4570286018738448438}
   - component: {fileID: 4570286018738448437}
   - component: {fileID: 4570286018738448436}
-  m_Layer: 0
+  - component: {fileID: 3949531918642925781}
+  m_Layer: 10
   m_Name: Right track
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -906,6 +935,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3949531918642925781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4570286018738448434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85c81f6902a6b6c4fba28b74c7236e79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackSpeed: 0
 --- !u!1 &4570286018833190624
 GameObject:
   m_ObjectHideFlags: 0

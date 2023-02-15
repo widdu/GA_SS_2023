@@ -7,8 +7,8 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     // Serialized variables
-    // [SerializeField] private Vector3 movement;    Inspectable value while uncommented
-    [SerializeField] private float jumpHeight = 2;
+    [SerializeField] private Vector3 movement;    // Inspectable value while uncommented
+    [SerializeField] private float jumpHeight = 2, movementSpeedSlopeSubtraction, timeScale;
     [SerializeField] ScoreBoard scoreBoard;
     [SerializeField] private List<BarrelSpawner> barrelSpawnerList;
 
@@ -17,8 +17,8 @@ public class PlayerController : MonoBehaviour
     private IMover mover;
     private Coroutine toggleIsJumping;
     private Animator animator;
-    private Vector3 playerOriginalPosition, movement, targetPosition, startPointDistanceToTrackStartPoint, distanceBetweenTracks;
-    private float movementSpeed, trackAngle, movementSpeedSlopeSubtraction;
+    private Vector3 playerOriginalPosition, /*movement,*/ targetPosition, startPointDistanceToTrackStartPoint, distanceBetweenTracks;
+    private float movementSpeed, trackAngle/*, movementSpeedSlopeSubtraction*/;
     private bool waitForRelease = false, queueJump = false, isJumping = false, switchingTrack = false;
     
     // Properties
@@ -102,6 +102,8 @@ public class PlayerController : MonoBehaviour
         }
         /*animator.SetFloat("MoveX", movement.normalized.z);
         animator.SetFloat("MoveZ", movement.normalized.x);*/
+
+        Time.timeScale = timeScale;
     }
 
     private void FixedUpdate()
@@ -141,7 +143,7 @@ public class PlayerController : MonoBehaviour
         trackAngle = trackPlatformGroupLocalEulerAngleX;
 
         // Subtract the effect of the slope on the track from movement speed and save it to the following variable.
-        movementSpeedSlopeSubtraction = movementSpeed - ((360 - Mathf.Abs(trackAngle)) * movementSpeed / 360);
+        movementSpeedSlopeSubtraction = movementSpeed - (movementSpeed - ((360 - Mathf.Abs(trackAngle)) * movementSpeed / 360));
     }
 
     private void MoveCharacter()
@@ -149,13 +151,16 @@ public class PlayerController : MonoBehaviour
         Vector2 playerPositionXZ = new Vector2(transform.localPosition.x, transform.localPosition.z);
         Vector2 targetPositionXZ = new Vector2(targetPosition.x, targetPosition.z);
         float distance = Vector2.Distance(playerPositionXZ, targetPositionXZ);
+        float lastDistance = distance - Mathf.Max(Mathf.Abs(movement.x), Mathf.Abs(movement.z));
 
-        if (Mathf.Max(Mathf.Abs(movement.x), Mathf.Abs(movement.z)) < distance)
+        if (Mathf.Max(Mathf.Abs(movement.x), Mathf.Abs(movement.z)) < distance && lastDistance > distance)
         {
             transform.Translate(movement);
+            Debug.Log("MovementX: " + movement.x + " and distance: " + distance);
         }
-        else
+        else if(Mathf.Max(Mathf.Abs(movement.x), Mathf.Abs(movement.z)) > distance || lastDistance < distance)
         {
+            Debug.Log("Positioned on target!");
             transform.position = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
 
             if(targetPosition.z > 0)
@@ -221,7 +226,7 @@ public class PlayerController : MonoBehaviour
             else if (moveInput.x == 0 && moveInput.y != 0 && targetPosition == Vector3.zero)
             {
                 Vector3 direction = new Vector3(0f, 0f, moveInput.y) * movementSpeed;
-                movement = direction * Time.deltaTime;
+                movement = new Vector3(direction.x, direction.y, direction.z - movementSpeedSlopeSubtraction) * Time.deltaTime;
                 targetPosition = movement + transform.position;
             }
         }

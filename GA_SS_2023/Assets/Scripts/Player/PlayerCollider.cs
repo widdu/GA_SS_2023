@@ -5,9 +5,10 @@ using UnityEngine;
 public class PlayerCollider : MonoBehaviour
 {
     // Private variables
+    private Transform playerTransform;
     private PlayerController playerController;
     private BoxCollider boxCollider;
-    private int hazardLayer = 7;
+    private int hazardLayer = 7, trackLayer = 10;
 
     public int collisionCount = 0; // Make this private
 
@@ -16,6 +17,12 @@ public class PlayerCollider : MonoBehaviour
 
     private void Awake()
     {
+        playerTransform = GetComponent<Transform>();
+        if (playerTransform == null)
+        {
+            Debug.LogWarning("Can't get player transform component for player object's player collider component!");
+        }
+
         playerController = GetComponent<PlayerController>();
         if (playerController == null)
         {
@@ -39,6 +46,15 @@ public class PlayerCollider : MonoBehaviour
         }
 
         playerController.SwitchingTrack = false;
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if(collision.gameObject.layer == trackLayer)
+        {
+            TrackController trackController = collision.gameObject.GetComponent<TrackController>();
+            playerTransform.Translate(-trackController.TrackSpeedV3);
+        }
     }
 
     private void OnCollisionExit(Collision collision)
