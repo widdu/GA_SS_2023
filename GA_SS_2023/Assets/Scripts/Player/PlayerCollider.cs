@@ -68,6 +68,7 @@ public class PlayerCollider : MonoBehaviour
         {
             GoalScore goalScore = collider.gameObject.GetComponent<GoalScore>();
             playerController.ReachGoal(goalScore);
+            goalScore.TrackController.UpdateTrackSpeed();
         }
 
         if (collider.gameObject.name == "Abyss")

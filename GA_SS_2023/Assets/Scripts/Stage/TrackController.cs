@@ -25,8 +25,8 @@ public class TrackController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void UpdateTrackSpeed()
     {
-        
+        trackSpeed += 0.05f;
     }
 }

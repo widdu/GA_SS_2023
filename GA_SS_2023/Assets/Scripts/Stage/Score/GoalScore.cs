@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class GoalScore : MonoBehaviour
 {
+    // Serialized variables
+    [SerializeField] private TrackController trackController;
+
+    public TrackController TrackController
+    {
+        get { return trackController; }
+    }
+
     // Private variables
     private int score;
 

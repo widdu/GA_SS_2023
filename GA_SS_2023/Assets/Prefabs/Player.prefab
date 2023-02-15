@@ -171,9 +171,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c147852118274544cb2c6b9632ddf88a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movement: {x: 0, y: 0, z: 0}
   jumpHeight: 2
+  movementSpeedSlopeSubtraction: 0
+  timeScale: 1
   scoreBoard: {fileID: 0}
-  barrelSpawnerList: []
+  barrelSpawnerList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   Fade: {fileID: 0}
   fadeScript: {fileID: 0}
 --- !u!114 &1484270924157455436

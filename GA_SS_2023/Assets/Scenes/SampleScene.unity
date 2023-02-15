@@ -566,10 +566,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 845250520}
     - target: {fileID: 2855901273993919490, guid: b73280e18185d4b4ea2a08fe67b9dcd8, type: 3}
-      propertyPath: timeScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2855901273993919490, guid: b73280e18185d4b4ea2a08fe67b9dcd8, type: 3}
       propertyPath: fadeScript
       value: 
       objectReference: {fileID: 845250522}
@@ -577,10 +573,6 @@ PrefabInstance:
       propertyPath: scoreBoard
       value: 
       objectReference: {fileID: 1926760541}
-    - target: {fileID: 2855901273993919490, guid: b73280e18185d4b4ea2a08fe67b9dcd8, type: 3}
-      propertyPath: barrelSpawnerList.Array.size
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 2855901273993919490, guid: b73280e18185d4b4ea2a08fe67b9dcd8, type: 3}
       propertyPath: barrelSpawnerList.Array.data[0]
       value: 
@@ -602,10 +594,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2054666431907316900, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
-      propertyPath: trackSpeed
-      value: 0.05
-      objectReference: {fileID: 0}
     - target: {fileID: 4570286018833190624, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
       propertyPath: m_Name
       value: Stage

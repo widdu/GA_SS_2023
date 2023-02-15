@@ -18,8 +18,8 @@ public class PlayerController : MonoBehaviour
     private Coroutine toggleIsJumping;
     private Animator animator;
     private Vector3 playerOriginalPosition, /*movement,*/ targetPosition, startPointDistanceToTrackStartPoint, distanceBetweenTracks;
-    private float movementSpeed, trackAngle/*, movementSpeedSlopeSubtraction*/;
-    private bool waitForRelease = false, queueJump = false, isJumping = false, switchingTrack = false;
+    private float movementSpeed, trackAngle/*, movementSpeedSlopeSubtraction*/, lastDistance;
+    private bool waitForRelease = true, queueJump = false, isJumping = false, switchingTrack = false;
     
     // Properties
     public bool WaitForRelease { get { return waitForRelease; } set { waitForRelease = value; } }
@@ -151,16 +151,16 @@ public class PlayerController : MonoBehaviour
         Vector2 playerPositionXZ = new Vector2(transform.localPosition.x, transform.localPosition.z);
         Vector2 targetPositionXZ = new Vector2(targetPosition.x, targetPosition.z);
         float distance = Vector2.Distance(playerPositionXZ, targetPositionXZ);
-        float lastDistance = distance - Mathf.Max(Mathf.Abs(movement.x), Mathf.Abs(movement.z));
 
-        if (Mathf.Max(Mathf.Abs(movement.x), Mathf.Abs(movement.z)) < distance && lastDistance > distance)
+        if (Mathf.Max(Mathf.Abs(movement.x), Mathf.Abs(movement.z)) <= distance && (lastDistance == 0 || (lastDistance != 0 && lastDistance > distance)))
         {
             transform.Translate(movement);
+            lastDistance = distance;
+
             Debug.Log("MovementX: " + movement.x + " and distance: " + distance);
         }
-        else if(Mathf.Max(Mathf.Abs(movement.x), Mathf.Abs(movement.z)) > distance || lastDistance < distance)
+        else if(Mathf.Max(Mathf.Abs(movement.x), Mathf.Abs(movement.z)) > distance || (lastDistance != 0 && lastDistance < distance))
         {
-            Debug.Log("Positioned on target!");
             transform.position = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
 
             if(targetPosition.z > 0)
@@ -171,6 +171,9 @@ public class PlayerController : MonoBehaviour
 
             targetPosition = Vector2.zero;
             animator.SetFloat("MoveZ", 0);
+            lastDistance = 0;
+
+            Debug.Log("Positioned on target!");
         }
     }
 
@@ -248,6 +251,7 @@ public class PlayerController : MonoBehaviour
         DoFade();
         fadeScript.FadeIn();
         waitForRelease = true;
+        lastDistance = 0;
     }
 
     private void ResetBarrelSpawners()
