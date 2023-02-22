@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour
             transform.Translate(movement);
             lastDistance = distance;
 
-            Debug.Log("MovementX: " + movement.x + " and distance: " + distance);
+           // Debug.Log("MovementX: " + movement.x + " and distance: " + distance);
         }
         else if(Mathf.Max(Mathf.Abs(movement.x), Mathf.Abs(movement.z)) > distance || (lastDistance != 0 && lastDistance < distance))
         {
@@ -173,7 +173,7 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("MoveZ", 0);
             lastDistance = 0;
 
-            Debug.Log("Positioned on target!");
+            // Debug.Log("Positioned on target!");
         }
     }
 

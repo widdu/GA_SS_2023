@@ -1317,10 +1317,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barrel spawner
       objectReference: {fileID: 0}
-    - target: {fileID: 5028881321370348150, guid: b03a1da119f1e724690da340d8daffcc, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8332367259086838696, guid: b03a1da119f1e724690da340d8daffcc, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1394,10 +1390,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barrel spawner
       objectReference: {fileID: 0}
-    - target: {fileID: 5028881321370348150, guid: b03a1da119f1e724690da340d8daffcc, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8332367259086838696, guid: b03a1da119f1e724690da340d8daffcc, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1470,10 +1462,6 @@ PrefabInstance:
     - target: {fileID: 5028881321370348150, guid: b03a1da119f1e724690da340d8daffcc, type: 3}
       propertyPath: m_Name
       value: Barrel spawner
-      objectReference: {fileID: 0}
-    - target: {fileID: 5028881321370348150, guid: b03a1da119f1e724690da340d8daffcc, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8332367259086838696, guid: b03a1da119f1e724690da340d8daffcc, type: 3}
       propertyPath: m_RootOrder

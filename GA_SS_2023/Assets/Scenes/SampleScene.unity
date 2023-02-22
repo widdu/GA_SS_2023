@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.4377013, g: 0.48558074, b: 0.5658589, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -258,14 +258,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.6343933, y: 0, z: 0, w: 0.7730105}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 78.75, y: 0, z: 0}
 --- !u!1 &845250520 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1045453036806702482, guid: 90796da0b74c5af4ca4d70de3ccece84, type: 3}
@@ -594,6 +594,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2054666431907316900, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
+      propertyPath: trackSpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3949531918642925781, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
+      propertyPath: trackSpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570286017970279851, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570286018416954137, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570286018738448436, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4570286018833190624, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
       propertyPath: m_Name
       value: Stage
@@ -646,6 +666,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 611901013}
+    - target: {fileID: 6108822264248606991, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
+      propertyPath: trackSpeed
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7196331842a4b3845b8390ecad3b3b62, type: 3}
 --- !u!1001 &7593941220052975084

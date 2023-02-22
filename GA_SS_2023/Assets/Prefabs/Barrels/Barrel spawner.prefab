@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8332367259086838696
 Transform:
   m_ObjectHideFlags: 0
@@ -45,5 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barrelSpawnTimer: 2
-  prefabBarrel: {fileID: 4607640115271958735, guid: 62cb6a5a09636cf40baae3b7025068ee, type: 3}
+  spawnArray:
+  - {fileID: 4607640115271958735, guid: 62cb6a5a09636cf40baae3b7025068ee, type: 3}
+  - {fileID: 2257727546949804039, guid: 9a7c5245f24f32f45a896c3e744addf1, type: 3}
+  - {fileID: 2580078577752381294, guid: ae6f901dd8efff149916f587c7390b97, type: 3}
   barrelList: []
