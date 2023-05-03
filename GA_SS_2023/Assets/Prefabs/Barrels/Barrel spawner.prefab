@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 681c0dd7ee32a974a82fb53ab90e891f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  barrelSpawnTimer: 2
+  barrelSpawnTimer: 3
   spawnArray:
   - {fileID: 4607640115271958735, guid: 62cb6a5a09636cf40baae3b7025068ee, type: 3}
   - {fileID: 2257727546949804039, guid: 9a7c5245f24f32f45a896c3e744addf1, type: 3}

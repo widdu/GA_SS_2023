@@ -10,7 +10,7 @@ public class ScoreBoard : MonoBehaviour
 
     // Private variables
     private TMP_Text text;
-    private int totalScore;
+    public int totalScore;
 
     private void Awake()
     {

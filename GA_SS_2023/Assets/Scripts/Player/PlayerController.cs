@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private List<BarrelSpawner> barrelSpawnerList;
 
     // Private variables
+    public int Lives = 3;
     private PlayerCollider playerCollider;
     private IMover mover;
     private Coroutine toggleIsJumping;
@@ -266,17 +267,39 @@ public class PlayerController : MonoBehaviour
     IEnumerator DoFade(){
         yield return new WaitForSeconds(2);
     }
-
+    private float time;
+    private int score;
     public void ResetLevel()
     {
-        // TODO: Record and reset score, restart run
+        if (Lives != 1){
         fadeScript.FadeOut();
-
-        // TODO: Move the line below to scene managing script!
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
+        transform.localPosition = playerOriginalPosition;
+        targetPosition = Vector3.zero;
+        path = Path.Start;
+        track = Track.Middle;
+        animator.ResetTrigger("JumpTrigger");
+        animator.Play("Idle and Move");
+        Lives --;
+        scoreBoard.UpdateScore();
+        ResetBarrelSpawners();
         DoFade();
         fadeScript.FadeIn();
+        waitForRelease = true;
+        lastDistance = 0;
+        
+        }
+        else{
+        GameObject Timer = GameObject.Find("Timer");
+        TimerScript timerScript = Timer.GetComponent<TimerScript>();
+        time = timerScript.timer;
+        GameObject Scoreboard = GameObject.Find("Scoreboard");
+        ScoreBoard scoreBoard = Scoreboard.GetComponent<ScoreBoard>();
+        score = scoreBoard.totalScore;
+        Debug.Log(time);
+        PlayerPrefs.SetString("Time",time.ToString("F2"));
+        PlayerPrefs.SetInt("Score",score);
+        SceneManager.LoadScene("GameOver");
+        } 
     }
 
     public void AnimatorSetFloat(Vector2 moveInput)

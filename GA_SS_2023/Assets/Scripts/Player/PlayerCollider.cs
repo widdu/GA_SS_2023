@@ -74,6 +74,7 @@ public class PlayerCollider : MonoBehaviour
         if (collider.gameObject.name == "Abyss")
         {
             playerController.ResetLevel();
+            playerController.SwitchingTrack = false;
         }
     }
 }
