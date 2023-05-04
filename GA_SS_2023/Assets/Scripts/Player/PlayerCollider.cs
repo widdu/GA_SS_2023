@@ -42,6 +42,7 @@ public class PlayerCollider : MonoBehaviour
 
         if(collision.gameObject.layer == hazardLayer)
         {
+            FindObjectOfType<Audiomanager>().Play("Barrel");
             playerController.ResetLevel();
         }
 
@@ -73,6 +74,7 @@ public class PlayerCollider : MonoBehaviour
 
         if (collider.gameObject.name == "Abyss")
         {
+            FindObjectOfType<Audiomanager>().Play("Fall");
             playerController.ResetLevel();
             playerController.SwitchingTrack = false;
         }

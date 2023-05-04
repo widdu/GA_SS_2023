@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private List<BarrelSpawner> barrelSpawnerList;
 
     // Private variables
-    public int Lives = 3;
+    public int Lives = 2;
     private PlayerCollider playerCollider;
     private IMover mover;
     private Coroutine toggleIsJumping;
@@ -277,6 +277,8 @@ public class PlayerController : MonoBehaviour
         targetPosition = Vector3.zero;
         path = Path.Start;
         track = Track.Middle;
+        queueJump = false;
+        isJumping = false;
         animator.ResetTrigger("JumpTrigger");
         animator.Play("Idle and Move");
         Lives --;
@@ -286,7 +288,6 @@ public class PlayerController : MonoBehaviour
         fadeScript.FadeIn();
         waitForRelease = true;
         lastDistance = 0;
-        
         }
         else{
         GameObject Timer = GameObject.Find("Timer");
@@ -298,8 +299,16 @@ public class PlayerController : MonoBehaviour
         Debug.Log(time);
         PlayerPrefs.SetString("Time",time.ToString("F2"));
         PlayerPrefs.SetInt("Score",score);
-        SceneManager.LoadScene("GameOver");
+        transform.localPosition = playerOriginalPosition;
+        fadeScript.FadeOut();
+
+        DoFade();
+        StartCoroutine(fallDelay());
         } 
+    }
+        IEnumerator fallDelay(){
+        yield return new WaitForSecondsRealtime(0.5f);
+        SceneManager.LoadScene("GameOver");
     }
 
     public void AnimatorSetFloat(Vector2 moveInput)
