@@ -57,6 +57,7 @@ GameObject:
   - component: {fileID: 2731002685779466609}
   - component: {fileID: 6353030484933011847}
   - component: {fileID: 2855901273993919490}
+  - component: {fileID: 2042282676618260016}
   - component: {fileID: 1484270924157455436}
   - component: {fileID: 6799577335587787182}
   - component: {fileID: 2731002685450014311}
@@ -180,8 +181,21 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  Lives: 3
   Fade: {fileID: 0}
   fadeScript: {fileID: 0}
+--- !u!114 &2042282676618260016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2731002685779466607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30a6060dc16b45f4a8e1b96e817020ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1484270924157455436
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,13 +7,13 @@ public class TimerScript : MonoBehaviour
     private TMP_Text text;
     public float timer;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         text = GetComponent<TMP_Text>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         timer += Time.deltaTime;
         text.text = "Time: " + timer.ToString("F2");
