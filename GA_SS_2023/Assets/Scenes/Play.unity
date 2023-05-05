@@ -675,6 +675,11 @@ MonoBehaviour:
     volume: 1
     pitch: 1
     source: {fileID: 0}
+  - name: Point
+    clip: {fileID: 8300000, guid: 7ebad429f6e4d8241bc82305374c2092, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
 --- !u!4 &2028542918
 Transform:
   m_ObjectHideFlags: 0

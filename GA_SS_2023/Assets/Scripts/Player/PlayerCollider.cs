@@ -67,6 +67,7 @@ public class PlayerCollider : MonoBehaviour
     {
         if (collider.gameObject.name == "End")
         {
+            FindObjectOfType<Audiomanager>().Play("Point");
             GoalScore goalScore = collider.gameObject.GetComponent<GoalScore>();
             playerController.ReachGoal(goalScore);
             goalScore.TrackController.UpdateTrackSpeed();
