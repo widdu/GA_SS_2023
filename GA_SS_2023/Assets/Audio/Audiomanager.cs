@@ -6,14 +6,14 @@ public class Audiomanager : MonoBehaviour
 {
     
     public AudioMixer audiomixer;
+    public float volume = 0.03f;
     public Sound[] sounds;
     // Start is called before the first frame update
     void Awake()
     {   
-        float volume;
-        bool result =  audiomixer.GetFloat("FxVolume", out volume);
         
         foreach(Sound s in sounds){
+            bool result =  audiomixer.GetFloat("FxVolume", out volume);
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
 
