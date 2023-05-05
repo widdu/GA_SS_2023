@@ -289,6 +289,7 @@ public class PlayerController : MonoBehaviour
         ResetBarrelSpawners();
         DoFade();
         fadeScript.FadeIn();
+        toggleIsJumping = null;
         waitForRelease = true;
         lastDistance = 0;
         }
@@ -304,9 +305,9 @@ public class PlayerController : MonoBehaviour
         PlayerPrefs.SetInt("Score",score);
         transform.localPosition = playerOriginalPosition;
         fadeScript.FadeOut();
-
         DoFade();
         StartCoroutine(fallDelay());
+        lastDistance = 0;
         } 
     }
         IEnumerator fallDelay(){

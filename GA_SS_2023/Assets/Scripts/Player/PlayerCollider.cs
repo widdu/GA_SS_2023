@@ -44,6 +44,8 @@ public class PlayerCollider : MonoBehaviour
         {
             FindObjectOfType<Audiomanager>().Play("Barrel");
             playerController.ResetLevel();
+            playerController.SwitchingTrack = false;
+            collisionCount--;
         }
 
         playerController.SwitchingTrack = false;
@@ -79,5 +81,7 @@ public class PlayerCollider : MonoBehaviour
             playerController.ResetLevel();
             playerController.SwitchingTrack = false;
         }
+
+
     }
 }
