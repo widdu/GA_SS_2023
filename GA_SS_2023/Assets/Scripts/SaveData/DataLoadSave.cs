@@ -8,7 +8,6 @@ List<Scoredata> scorelist = new List<Scoredata> ();
     int maxCount = 5;
     string filename = "Scores.json";
     private void Start(){
-    //LoadScores();
     }
     public void LoadScores(){
         scorelist = FileHandler.ReadListFromJSON<Scoredata>(filename);

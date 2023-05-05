@@ -8,6 +8,7 @@ public class Buttons : MonoBehaviour
     // Start is called before the first frame update
     public void ButtonNewGame()
     {
+        PlayerPrefs.SetInt("Load",0);
         SceneManager.LoadScene("Play");
     }
        public void ButtonMainMenu()
@@ -17,20 +18,13 @@ public class Buttons : MonoBehaviour
 
     public void loadSave()
     {
-        
+        PlayerPrefs.SetInt("Load",1);
+        SceneManager.LoadScene("Play");
     }
 
     // Update is called once per frame
-    public void ButtonSettings()
-    {
-        
-    }
     public void ButtonExit()
     {
-        
+        Application.Quit();
     }
-    /*public void ButtonSettings()
-    {
-        
-    }*/
 }

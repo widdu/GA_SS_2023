@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        
         playerCollider = GetComponent<PlayerCollider>();
         if (playerCollider == null)
         {
@@ -76,6 +77,8 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogWarning("Can't find player object child's animator component for player controller component!");
         }
+
+
     }
 
     // Start is called before the first frame update
