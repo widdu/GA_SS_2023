@@ -47,8 +47,11 @@ public class Barrel : MonoBehaviour
             TrackController trackController = collision.gameObject.GetComponent<TrackController>();
             /*rigidbody.velocity = new Vector3(rigidbody.velocity.x, rigidbody.velocity.y, rigidbody.velocity.z - (trackController.TrackSpeedF * (1 - rigidbody.drag))); // Multipliers?
             rigidbody.angularVelocity = new Vector3(rigidbody.angularVelocity.x - (trackController.TrackSpeedF * (1 - rigidbody.drag)), rigidbody.angularVelocity.y, rigidbody.angularVelocity.z);*/
+
             rigidbody.velocity = new Vector3(rigidbody.velocity.x, rigidbody.velocity.y, rigidbody.velocity.z - trackController.TrackSpeedF); // Multipliers?
             rigidbody.angularVelocity = new Vector3(rigidbody.angularVelocity.x - trackController.TrackSpeedF, rigidbody.angularVelocity.y, rigidbody.angularVelocity.z);
+
+            //transform.Translate(collision.transform.forward * (-trackController.TrackSpeedF));
         }
     }
 
